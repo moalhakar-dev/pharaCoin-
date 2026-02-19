@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>PharaCoin - الملف الشخصي</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Cairo;
+    background:url("Object/qa.jpg") no-repeat center center fixed;
+    background-size:cover;
+    color:white;
+}
+.overlay{
+    background:rgba(0,0,0,0.08); /* تغطية خفيفة فقط لإبراز النصوص */
+    min-height:100vh;
+    padding:20px;
+}
+
+/* عنوان الصفحة */
+.header{
+    text-align:center;
+    color:gold;
+    font-size:38px;
+    font-weight:bold;
+    margin-bottom:20px;
+    text-shadow:0 0 10px black;
+}
+
+/* صندوق البروفايل شفاف جزئياً */
+.profile-box{
+    background:rgba(11,11,11,0.3); /* شفاف جزئي */
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 0 25px gold;
+    max-width:430px;
+    margin:auto;
+    animation:fadeIn 1s ease;
+}
+
+/* الصورة */
+.avatar{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:3px solid gold;
+    display:block;
+    margin:auto;
+    box-shadow:0 0 15px gold;
+}
+
+/* معلومات الحساب */
+.info{
+    text-align:center;
+    color:white;
+    margin-top:10px;
+    font-size:18px;
+}
+.label{
+    color:gold;
+    font-weight:bold;
+    margin-top:10px;
+}
+.data-box{
+    background:rgba(26,26,26,0.3); /* شفاف جزئي */
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
+    color:white;
+    border:1px solid gold;
+    margin-bottom:15px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid gold;
+    background:rgba(26,26,26,0.3);
+    color:white;
+    margin-bottom:15px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    background:gold;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+button:hover{
+    background:orange;
+}
+
+/* روابط الشروط والخصوصية */
+.policy-links{
+    margin-top:20px;
+    text-align:center;
+}
+.policy-links a{
+    color:#00ff9d;
+    font-weight:bold;
+    margin:0 10px;
+    text-decoration:none;
+}
+.policy-links a:hover{
+    color:gold;
+    text-decoration:underline;
+}
+
+/* animation */
+@keyframes fadeIn{
+    0%{opacity:0; transform:translateY(30px);}
+    100%{opacity:1; transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+<div class="overlay">
+
+<div class="header">👤 ملفي الشخصي 👤</div>
+
+<div class="profile-box">
+
+<img src="Object/profile.png" class="avatar">
+
+<div class="info"><b>اسم المستخدم:</b> Ahmed123</div>
+
+<div class="label">💰 رصيدك:</div>
+<div class="data-box" id="coins">250 Coins</div>
+
+<div class="label">📞 رقم الهاتف:</div>
+<div class="data-box">01000000000</div>
+
+<div class="label">📧 البريد الإلكتروني:</div>
+<div class="data-box">example@gmail.com</div>
+
+<div class="label">🔐 تغيير كلمة المرور:</div>
+<input type="password" placeholder="كلمة المرور الجديدة" id="newpass">
+
+<button onclick="savePass()">حفظ التغيير</button>
+
+<button onclick="location.href='home.html'">🔙 الرجوع</button>
+
+<!-- روابط الشروط والخصوصية -->
+<div class="policy-links">
+    <a href="terms.html">📜 شروط الاستخدام</a> |
+    <a href="privacy.html">🔒 سياسة الخصوصية</a>
+</div>
+
+</div>
+
+</div>
+
+<script>
+function savePass(){
+    let p = document.getElementById("newpass").value;
+    if(p.length < 4){
+        alert("❌ كلمة المرور قصيرة جدًا");
+        return;
+    }
+    alert("✅ تم تغيير كلمة المرور بنجاح");
+}
+</script>
+
+</body>
+</html>

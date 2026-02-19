@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>تسجيل حساب - PharaCoin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Cairo;
+background:url("Object/qa.jpg") no-repeat center center fixed;
+background-size:cover;
+}
+
+.overlay{
+background:rgba(0,0,0,0.12);
+min-height:100vh;
+padding:20px;
+}
+
+.title{
+text-align:center;
+font-size:32px;
+color:gold;
+text-shadow:0 0 10px black;
+}
+
+/* Grid */
+.statues{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin:20px 0;
+}
+
+.statues img{
+width:100%;
+border-radius:15px;
+border:2px solid gold;
+box-shadow:0 0 20px gold;
+}
+
+/* Rare */
+.rare-item{
+grid-column:2;
+grid-row:1 / span 2;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.rare-box{
+width:100%;
+height:100%;
+background:black;
+border-radius:20px;
+border:3px solid red;
+box-shadow:0 0 35px red;
+color:gold;
+font-weight:bold;
+font-size:22px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+animation:rarePulse .8s infinite alternate;
+}
+
+@keyframes rarePulse{
+from{transform:scale(1)}
+to{transform:scale(1.06);box-shadow:0 0 60px red}
+}
+
+/* Form */
+.register-box{
+max-width:400px;
+margin:auto;
+background:rgba(0,0,0,0.85);
+padding:25px;
+border-radius:15px;
+box-shadow:0 0 25px gold;
+}
+
+.input-group{
+margin-bottom:14px;
+position:relative;
+}
+
+input{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid gold;
+background:#111;
+color:#fff;
+}
+
+input.error{
+border:1px solid red;
+box-shadow:0 0 8px red;
+}
+
+.error-text{
+color:#ff4d4d;
+font-size:13px;
+display:none;
+margin-top:4px;
+}
+
+/* Eye */
+.eye{
+position:absolute;
+right:10px;
+top:12px;
+cursor:pointer;
+color:gold;
+}
+
+/* Strength */
+.strength{
+height:6px;
+background:#333;
+border-radius:10px;
+margin-top:6px;
+overflow:hidden;
+}
+
+.strength span{
+display:block;
+height:100%;
+width:0%;
+background:red;
+transition:.3s;
+}
+
+/* Terms */
+.terms-box{
+display:flex;
+align-items:center;
+gap:8px;
+margin-top:10px;
+color:#00ff9d;
+font-size:14px;
+}
+
+.terms-box a{
+color:gold;
+text-decoration:none;
+font-weight:bold;
+}
+
+.terms-box a:hover{
+text-decoration:underline;
+}
+
+/* Button */
+button{
+width:100%;
+padding:12px;
+background:gold;
+border:none;
+font-weight:bold;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{background:orange}
+
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+<div class="title">🪙 سجل الآن واحصل على 100 جنيه</div>
+
+<div class="statues">
+<img src="Object/qa.jpg">
+
+<div class="rare-item">
+<div class="rare-box">
+✨<br>القطعة<br>النادرة<br>✨
+</div>
+</div>
+
+<img src="Object/qs.jpg">
+<img src="Object/qd.jpg">
+<img src="Object/qf.jpg">
+</div>
+
+<div class="register-box">
+
+<form id="registerForm">
+
+<!-- Username -->
+<div class="input-group">
+<input type="text" id="username" placeholder="اسم المستخدم">
+<div class="error-text" id="userErr">يرجى ملء الحقل</div>
+</div>
+
+<!-- Phone OR Email -->
+<div class="input-group">
+<input type="text" id="contact" placeholder="رقم الهاتف أو البريد الإلكتروني">
+<div class="error-text" id="contactErr">
+أدخل رقم مصري يبدأ بـ 01 أو بريد إلكتروني صحيح
+</div>
+</div>
+
+<!-- Password -->
+<div class="input-group">
+<input type="password" id="password" placeholder="كلمة المرور">
+<span class="eye" onclick="togglePass('password')">👁️</span>
+<div class="strength"><span id="strengthBar"></span></div>
+<div class="error-text" id="passErr">أدخل كلمة المرور</div>
+</div>
+
+<!-- Confirm -->
+<div class="input-group">
+<input type="password" id="confirm" placeholder="تأكيد كلمة المرور">
+<span class="eye" onclick="togglePass('confirm')">👁️</span>
+<div class="error-text" id="confirmErr">كلمة المرور غير متطابقة</div>
+</div>
+
+<!-- Terms -->
+<div class="terms-box">
+<input type="checkbox" id="termsCheck">
+<label for="termsCheck">
+أوافق على 
+<a href="terms.html" target="_blank">الشروط والأحكام</a>
+و
+<a href="privacy.html" target="_blank">سياسة الخصوصية</a>
+</label>
+</div>
+
+<div class="error-text" id="termsErr">
+يجب الموافقة على الشروط والخصوصية
+</div>
+
+<div id="recaptcha-container"></div>
+
+<button type="submit">تسجيل الحساب</button>
+
+</form>
+</div>
+</div>
+
+<script>
+
+/* Firebase */
+firebase.initializeApp({
+apiKey:"AIzaSyB78JT_cbPMizvzKWBrQoQUe3-zukHrr1U",
+authDomain:"pharacoin.firebaseapp.com",
+projectId:"pharacoin"
+});
+
+/* Eye */
+function togglePass(id){
+let input=document.getElementById(id);
+input.type=input.type==="password"?"text":"password";
+}
+
+/* Strength */
+password.oninput=function(){
+let v=password.value.length;
+let bar=document.getElementById("strengthBar");
+
+if(v<4){bar.style.width="30%";bar.style.background="red";}
+else if(v<7){bar.style.width="60%";bar.style.background="orange";}
+else{bar.style.width="100%";bar.style.background="lime";}
+};
+
+/* Validation */
+function showErr(i,e){
+i.classList.add("error");
+e.style.display="block";
+}
+
+function hideErr(i,e){
+i.classList.remove("error");
+e.style.display="none";
+}
+
+registerForm.onsubmit=function(e){
+e.preventDefault();
+
+let valid=true;
+
+let user=username.value.trim();
+let contactVal=contact.value.trim();
+let pass=password.value;
+let conf=confirm.value;
+let terms=termsCheck.checked;
+
+/* Username */
+if(!user){showErr(username,userErr);valid=false;}
+else hideErr(username,userErr);
+
+/* Phone / Email */
+let phone=/^01[0-9]{9}$/;
+let email=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if(!(phone.test(contactVal)||email.test(contactVal))){
+showErr(contact,contactErr);
+valid=false;
+}else hideErr(contact,contactErr);
+
+/* Password */
+if(!pass){showErr(password,passErr);valid=false;}
+else hideErr(password,passErr);
+
+/* Confirm */
+if(pass!==conf){
+showErr(confirm,confirmErr);
+valid=false;
+}else hideErr(confirm,confirmErr);
+
+/* Terms */
+if(!terms){
+termsErr.style.display="block";
+valid=false;
+}else termsErr.style.display="none";
+
+if(!valid) return;
+
+/* ========================= */
+/* 📱 PHONE OTP */
+/* ========================= */
+if(phone.test(contactVal)){
+
+let number="+20"+contactVal.slice(1);
+
+window.recaptchaVerifier=
+new firebase.auth.RecaptchaVerifier(
+"recaptcha-container",
+{size:"invisible"}
+);
+
+firebase.auth()
+.signInWithPhoneNumber(number,recaptchaVerifier)
+.then(function(confirmationResult){
+
+window.confirmationResult=confirmationResult;
+
+sessionStorage.setItem("user",user);
+sessionStorage.setItem("phone",number);
+
+location="otp.html";
+
+})
+.catch(function(error){
+alert("فشل إرسال الكود ❌\n"+error.message);
+});
+
+/* ========================= */
+/* ✉️ EMAIL VERIFICATION */
+/* ========================= */
+}else{
+
+firebase.auth()
+.createUserWithEmailAndPassword(contactVal,pass)
+.then((userCredential)=>{
+
+let currentUser=userCredential.user;
+
+/* إرسال رابط التحقق */
+currentUser.sendEmailVerification()
+.then(()=>{
+
+alert(
+"تم إنشاء الحساب ✅\n\n" +
+"تم إرسال رابط التحقق إلى بريدك الإلكتروني 📧\n" +
+"افتحه لتفعيل الحساب"
+);
+
+sessionStorage.setItem("user",user);
+sessionStorage.setItem("email",contactVal);
+
+/* تحويل اختياري */
+location="verify.html";
+
+});
+
+})
+.catch(err=>alert(err.message));
+
+}
+
+};
+
+</script>
+
+</body>
+</html>

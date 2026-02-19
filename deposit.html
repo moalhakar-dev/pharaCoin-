@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إيداع الرصيد</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+    margin:0;
+    font-family:Cairo, sans-serif;
+    background:black;
+    overflow-x:hidden;
+}
+.bg{
+    position:fixed;
+    inset:0;
+    background:url("Object/qa.jpg") center/cover no-repeat;
+    z-index:-3;
+}
+.bg::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.25);
+}
+.gold-light{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-2;
+    background:
+    radial-gradient(circle at 20% 30%, rgba(255,215,0,.15), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255,215,0,.12), transparent 40%);
+    animation:shine 8s linear infinite alternate;
+}
+@keyframes shine{
+    0%{opacity:.4;}
+    100%{opacity:.8;}
+}
+.overlay{
+    min-height:100vh;
+    padding:25px;
+    color:white;
+}
+.deposit-box{
+    max-width:500px;
+    margin:20px auto;
+    background:rgba(0,0,0,.28);
+    border-radius:18px;
+    padding:25px;
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 0 25px rgba(255,215,0,.15);
+}
+h2{
+    text-align:center;
+    color:gold;
+}
+
+.data-field{
+    background:#0e0e0e;
+    padding:14px;
+    border-radius:10px;
+    word-break:break-all;
+    text-align:center;
+    margin-bottom:10px;
+    border:1px solid gold;
+    font-weight:bold;
+}
+
+.copy-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:gold;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:15px;
+}
+.copy-btn:hover{
+    background:orange;
+}
+
+select,input{
+    width:100%;
+    padding:14px;
+    margin-bottom:12px;
+    border-radius:10px;
+    border:1px solid gold;
+    background:#0e0e0e;
+    color:white;
+}
+
+.coins-result{
+    text-align:center;
+    color:red;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:gold;
+    font-weight:bold;
+    cursor:pointer;
+}
+button:hover{
+    background:orange;
+}
+
+.success{
+    margin-top:15px;
+    text-align:center;
+    color:#00ff9d;
+    font-weight:bold;
+    display:none;
+}
+.error{
+    margin-top:15px;
+    text-align:center;
+    color:red;
+    font-weight:bold;
+    display:none;
+}
+
+.note{
+    text-align:center;
+    margin-top:10px;
+    font-size:14px;
+    opacity:.85;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="gold-light"></div>
+
+<div class="overlay">
+
+<div class="deposit-box">
+<h2>💰 إيداع الرصيد</h2>
+
+<div class="data-field" id="phone">01069806835</div>
+<button class="copy-btn" onclick="copyText('phone')">نسخ رقم الإيداع</button>
+
+<div class="data-field" id="wallet">TPNgUyRe7GSnazUzakRU3egEU4XBS7Pu5h</div>
+<button class="copy-btn" onclick="copyText('wallet')">نسخ عنوان محفظة USDT</button>
+
+<div class="note">💱 ملحوظة: 1$ = 50 جنيه</div>
+
+<hr style="opacity:.3;margin:15px 0;">
+
+<select id="method" onchange="changePlaceholder()">
+<option value="">اختر طريقة الإيداع</option>
+<option>فودافون كاش</option>
+<option>اتصالات كاش</option>
+<option>اورنج كاش</option>
+<option>USDT</option>
+</select>
+
+<input type="text" id="fromNumber" placeholder="أدخل الرقم الذي تم التحويل منه">
+
+<input type="number" id="amount" placeholder="أدخل مبلغ الإيداع بالجنيه" oninput="calcCoins()">
+
+<div class="coins-result" id="coinsResult"></div>
+
+<input type="file" id="proof" accept="image/*">
+
+<button onclick="confirmDeposit()">تم تأكيد الإيداع</button>
+
+<div class="success" id="successMsg">✔ تم إرسال طلب الإيداع بنجاح</div>
+<div class="error" id="errorMsg"></div>
+
+<div class="note">يرجى رفع صورة إثبات التحويل لتأكيد الإيداع</div>
+</div>
+
+</div>
+
+<script>
+const minAmount = 50;
+
+function copyText(id){
+let text=document.getElementById(id).innerText;
+navigator.clipboard.writeText(text);
+alert("تم النسخ ✔");
+}
+
+function changePlaceholder(){
+let method = document.getElementById("method").value;
+let input = document.getElementById("fromNumber");
+
+if(method === "USDT"){
+input.placeholder = "أدخل عنوان محفظتك الخاصة بك";
+}else{
+input.placeholder = "أدخل الرقم الذي تم التحويل منه";
+}
+}
+
+function calcCoins(){
+let amount = document.getElementById("amount").value;
+let result = document.getElementById("coinsResult");
+
+if(amount && amount > 0){
+if(amount < minAmount){
+result.style.color="red";
+result.innerText = "أقل إيداع 50 جنيه";
+}else{
+let coins = amount * 2;
+result.style.color="red";
+result.innerText = "سيتم إضافة " + coins + " Coins";
+}
+}else{
+result.innerText = "";
+}
+}
+
+function confirmDeposit(){
+let method=document.getElementById("method").value;
+let fromNumber=document.getElementById("fromNumber").value;
+let amount=document.getElementById("amount").value;
+let proof=document.getElementById("proof").files[0];
+let error=document.getElementById("errorMsg");
+
+error.style.display="none";
+
+if(method=="" || fromNumber=="" || amount=="" || !proof){
+error.innerText="يرجى إدخال جميع البيانات ورفع صورة الإثبات";
+error.style.display="block";
+return;
+}
+
+if(amount < minAmount){
+error.innerText="أقل مبلغ للإيداع هو 50 جنيه";
+error.style.display="block";
+return;
+}
+
+let coins = amount * 2;
+
+let token="8535863939:AAFC4qgREiGQC-4c1QCQNrNp3gMprRsQRTs";
+let chat_id="6733319757";
+
+let formData=new FormData();
+formData.append("chat_id",chat_id);
+formData.append("caption",
+"💰 طلب إيداع جديد\n\n"+
+"الطريقة: "+method+"\n"+
+"بيانات المُحوِّل: "+fromNumber+"\n"+
+"المبلغ: "+amount+" جنيه\n"+
+"عدد Coins: "+coins
+);
+formData.append("photo",proof);
+
+fetch(`https://api.telegram.org/bot${token}/sendPhoto`,{
+method:"POST",
+body:formData
+});
+
+document.getElementById("successMsg").style.display="block";
+}
+</script>
+
+</body>
+</html>

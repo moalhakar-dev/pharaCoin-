@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>تسجيل الدخول - pharaCoin</title>
+
+<style>
+
+/* ضبط الصفحة بالكامل */
+html,body{
+margin:0;
+padding:0;
+height:100%;
+font-family:tahoma;
+overflow:hidden; /* يمنع الفراغ الأبيض */
+}
+
+/* الخلفية */
+body{
+background:url("Object/qa.jpg") no-repeat center center fixed;
+background-size:cover;
+display:flex;
+justify-content:center;
+align-items:center;
+color:#fff;
+}
+
+/* الطبقة الشفافة */
+.overlay{
+background:rgba(0,0,0,0.1);
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* صندوق تسجيل الدخول */.login-box{
+background:rgba(0,0,0,0.55); /* تعتيم على المربع فقط */
+padding:30px;
+border-radius:20px;
+width:350px;
+text-align:center;
+box-shadow:0 0 40px #000;
+border:1px solid gold;
+position:relative;
+backdrop-filter:blur(6px); /* تأثير زجاجي فخم */
+}
+
+/* العنوان */
+.login-box h2{
+color:gold;
+margin-bottom:20px;
+}
+
+/* الحقول */
+.login-box input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+background:#1a1a1a;
+color:#fff;
+font-size:14px;
+}
+
+/* الباسورد */
+.password-box{
+position:relative;
+}
+
+.password-box span{
+position:absolute;
+right:10px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+color:gold;
+font-size:13px;
+}
+
+/* الخيارات */
+.options{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:13px;
+margin-top:5px;
+}
+
+.options label{
+display:flex;
+align-items:center;
+gap:5px;
+cursor:pointer;
+}
+
+.options a{
+color:gold;
+text-decoration:none;
+}
+
+/* الزر */
+.login-box button{
+width:100%;
+padding:12px;
+margin-top:15px;
+border:none;
+border-radius:10px;
+background:gold;
+color:#000;
+font-weight:bold;
+font-size:15px;
+cursor:pointer;
+}
+
+.login-box button:hover{
+background:orange;
+}
+
+/* رابط التسجيل */
+.register-link{
+margin-top:15px;
+font-size:14px;
+}
+
+.register-link a{
+color:gold;
+text-decoration:none;
+}
+
+/* التماثيل */
+.statue{
+position:absolute;
+width:120px;
+}
+
+.statue.left{
+left:-130px;
+top:50%;
+transform:translateY(-50%);
+}
+
+.statue.right{
+right:-130px;
+top:50%;
+transform:translateY(-50%);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+<div class="login-box">
+
+<!-- تماثيل -->
+<img src="Object/qs.jpg" class="statue left">
+<img src="Object/qf.jpg" class="statue right">
+
+<h2>تسجيل الدخول</h2>
+
+<form>
+
+<input type="text" placeholder="رقم الموبايل أو الجيميل" required>
+
+<div class="password-box">
+<input type="password" id="password" placeholder="كلمة المرور" required>
+<span onclick="togglePassword()">إظهار</span>
+</div>
+
+<div class="options">
+
+<label>
+<input type="checkbox">
+تذكرني
+</label>
+
+<a href="#">نسيت كلمة المرور؟</a>
+
+</div>
+
+<button type="submit">دخول</button>
+
+</form>
+
+<div class="register-link">
+ليس لديك حساب؟ <a href="register.html">إنشاء حساب</a>
+</div>
+
+</div>
+</div>
+
+<!-- سكربت صحيح -->
+<script>
+
+function togglePassword(){
+
+var pass = document.getElementById("password");
+
+if(pass.type === "password"){
+pass.type = "text";
+}else{
+pass.type = "password";
+}
+
+}
+
+</script>
+
+</body>
+</html>
