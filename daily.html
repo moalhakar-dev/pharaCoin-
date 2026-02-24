@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>🎁 المكافآت الأسبوعية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<style>
+body{
+    margin:0;
+    font-family:Cairo, sans-serif;
+    background: url("Object/qa.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color:white;
+    text-align:center;
+}
+
+.overlay{
+    background:rgba(0,0,0,0.75);
+    min-height:100vh;
+    padding:40px 15px;
+}
+
+.title{
+    color:gold;
+    margin-bottom:30px;
+    font-size:26px;
+}
+
+.week-grid{
+    display:grid;
+    grid-template-columns: repeat(7,1fr);
+    gap:8px;
+    max-width:600px;
+    margin:auto;
+}
+
+.day-box{
+    padding:15px 5px;
+    border-radius:15px;
+    background:#1e1e2f;
+    border:1px solid #444;
+    cursor:pointer;
+    transition:0.3s;
+    font-size:14px;
+}
+
+.day-box.available{
+    background:gold;
+    color:black;
+    font-weight:bold;
+    box-shadow:0 0 15px gold;
+}
+
+.day-box.claimed{
+    background:#00c853;
+}
+
+.day-box.locked{
+    background:#222;
+    color:#555;
+    cursor:not-allowed;
+}
+
+.message{
+    margin-top:25px;
+    font-size:18px;
+}
+
+.login-warning{
+    margin-top:40px;
+    font-size:20px;
+    color:#ff5252;
+}
+</style>
+</head>
+<body>
+
+<div class="overlay">
+    <div class="title">🔥 المكافآت الأسبوعية</div>
+    <div id="content">
+        <div class="login-warning">جارٍ التحقق من تسجيل الدخول...</div>
+    </div>
+</div>
+
+<script>
+
+// بيانات Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyB78JT_cbPMizvzKWBrQoQUe3-zukHrr1U",
+  authDomain: "pharacoin.firebaseapp.com",
+  projectId: "pharacoin"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+auth.onAuthStateChanged(async(user)=>{
+
+    if(!user){
+        document.getElementById("content").innerHTML =
+        `<div class="login-warning">⚠ يجب تسجيل الدخول أولاً</div>`;
+        return;
+    }
+
+    renderWeek(user);
+});
+
+async function renderWeek(user){
+
+    const userRef = db.collection("users").doc(user.uid);
+    const doc = await userRef.get();
+    let data = doc.exists ? doc.data() : {};
+
+    let lastClaimedDate = data.lastClaimedDate || "";
+    let weekDay = data.weekDay || 0;
+
+    const today = new Date().toDateString();
+
+    let html = `
+        <div class="week-grid" id="weekGrid"></div>
+        <div class="message" id="message"></div>
+    `;
+
+    document.getElementById("content").innerHTML = html;
+
+    let grid = document.getElementById("weekGrid");
+
+    for(let i=0;i<7;i++){
+
+        let box = document.createElement("div");
+        box.classList.add("day-box");
+        box.innerHTML = `اليوم ${i+1}<br>5 🪙`;
+
+        if(i < weekDay){
+            box.classList.add("claimed");
+        }
+        else if(i === weekDay && lastClaimedDate !== today){
+            box.classList.add("available");
+            box.onclick = ()=> claimReward(user);
+        }
+        else{
+            box.classList.add("locked");
+        }
+
+        grid.appendChild(box);
+    }
+}
+
+async function claimReward(user){
+
+    const today = new Date().toDateString();
+    const userRef = db.collection("users").doc(user.uid);
+    const doc = await userRef.get();
+    let data = doc.exists ? doc.data() : {};
+
+    if(data.lastClaimedDate === today){
+        document.getElementById("message").innerText="⏳ حصلت على مكافأة اليوم بالفعل";
+        return;
+    }
+
+    let coins = data.coins || 0;
+    coins += 5;
+
+    let nextDay = (data.weekDay || 0) + 1;
+    if(nextDay > 6) nextDay = 0;
+
+    await userRef.set({
+        coins: coins,
+        lastClaimedDate: today,
+        weekDay: nextDay
+    }, {merge:true});
+
+    document.getElementById("message").innerText="🎉 تم استلام مكافأة اليوم";
+
+    renderWeek(user);
+}
+
+</script>
+
+</body>
+</html>
