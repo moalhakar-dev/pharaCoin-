@@ -3,194 +3,185 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تواصل معنا</title>
+<title>تواصل معنا - PharaCoin</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
 
-/* ===== الخلفية نفس باقي الصفحات ===== */
 body{
-    margin:0;
-    font-family:Cairo, sans-serif;
-    background:black;
-    overflow-x:hidden;
+  font-family:'Cairo',sans-serif;
+  background:#000;
+  color:#fff;
+  max-width:480px;
+  margin:auto;
 }
 
-/* صورة الخلفية */
-.bg{
-    position:fixed;
-    inset:0;
-    background:url("Object/qa.jpg") center/cover no-repeat;
-    z-index:-3;
+/* الخلفية */
+.page-bg{
+  position:fixed;
+  inset:0;
+  background:url("Object/qa.jpg") center/cover no-repeat;
+  filter:brightness(0.25) saturate(1.2);
+  z-index:-1;
 }
 
-/* تعتيم خفيف */
-.bg::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,.25);
+/* الهيدر */
+.header{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:16px;
+  background:rgba(0,0,0,0.85);
+  border-bottom:1px solid rgba(255,0,0,0.4);
+  backdrop-filter:blur(10px);
 }
-
-/* لمعة ذهبية */
-.gold-light{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:-2;
-    background:
-    radial-gradient(circle at 20% 30%, rgba(255,215,0,.15), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255,215,0,.12), transparent 40%);
-    animation:shine 8s linear infinite alternate;
-}
-
-@keyframes shine{
-    0%{opacity:.4; transform:translateY(0)}
-    100%{opacity:.8; transform:translateY(-40px)}
-}
-
-/* المحتوى */
-.overlay{
-    min-height:100vh;
-    padding:25px;
-    background:transparent;
-    color:white;
+.logo{
+  color:red;
+  font-weight:900;
+  font-size:18px;
+  text-shadow:0 0 10px red,0 0 25px darkred;
 }
 
 /* العنوان */
-.header{
-    text-align:center;
-    margin-bottom:30px;
+.section-title{
+  text-align:center;
+  margin:18px 0 12px;
+  color:red;
+  font-size:18px;
+  font-weight:800;
+  text-shadow:0 0 10px red;
 }
 
-.header h1{
-    font-size:34px;
-    margin:0;
-}
-
-.header p{
-    opacity:.9;
-}
-
-/* صندوق التواصل */
-.contact-box{
-    max-width:500px;
-    margin:20px auto;
-    background:rgba(0,0,0,.28);
-    border-radius:18px;
-    padding:25px;
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.15);
-    box-shadow:0 0 25px rgba(255,215,0,.15);
-    text-align:center;
+/* الصندوق */
+.box{
+  margin:0 16px;
+  padding:22px;
+  background:rgba(0,0,0,0.65);
+  border-radius:20px;
+  border:1px solid rgba(255,0,0,0.4);
+  box-shadow:0 0 30px rgba(0,0,0,0.7);
+  text-align:center;
 }
 
 /* أيقونة */
 .contact-icon{
-    font-size:55px;
-    color:gold;
-    margin-bottom:15px;
-    text-shadow:0 0 15px rgba(255,215,0,.6);
+  font-size:55px;
+  color:red;
+  margin-bottom:15px;
+  text-shadow:0 0 15px red;
 }
 
 /* اليوزر */
 .username{
-    background:#0e0e0e;
-    padding:15px;
-    border-radius:10px;
-    border:1px solid gold;
-    font-weight:bold;
-    font-size:18px;
-    margin-bottom:15px;
-    word-break:break-all;
+  background:#111;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid red;
+  font-weight:bold;
+  font-size:16px;
+  margin-bottom:15px;
+  word-break:break-all;
 }
 
 /* زر */
 .contact-btn{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    background:gold;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.2s;
-    font-size:16px;
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:red;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+  font-size:15px;
+  box-shadow:0 0 15px white,0 0 30px red;
 }
 
 .contact-btn:hover{
-    background:orange;
-    transform:scale(1.05);
+  transform:scale(1.05);
+  box-shadow:0 0 25px white,0 0 60px red;
 }
 
 .note{
-    margin-top:20px;
-    opacity:.85;
-    font-size:14px;
+  margin-top:15px;
+  opacity:.85;
+  font-size:13px;
 }
-
+.footer-links {
+  text-align: center;
+  margin: 20px 16px;
+  padding: 10px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 10px;
+  font-size: 12px;
+}
+.footer-links a {
+  color: gold;
+  text-decoration: none;
+  margin: 0 5px;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
-<div class="gold-light"></div>
-
-<div class="overlay">
+<div class="page-bg"></div>
 
 <div class="header">
-    <h1>تواصل معنا</h1>
-    <p>فريق الدعم جاهز للرد على استفساراتك</p>
+  <div class="logo">📞 PharaCoin</div>
 </div>
 
-<div class="contact-box">
+<div class="section-title">تواصل معنا</div>
 
-    <div class="contact-icon">
-        <i class="fa-brands fa-telegram"></i>
-    </div>
+<div class="box">
 
-    <div class="username" id="telegram">
-        @PharacoinSupport
-    </div>
+  <div class="contact-icon">
+    <i class="fa-brands fa-telegram"></i>
+  </div>
 
-    <button class="contact-btn" onclick="openTelegram()">
-        فتح التليجرام
-    </button>
+  <div class="username" id="telegram">
+    @PharacoinSupport
+  </div>
 
-    <button class="contact-btn" onclick="copyUser()" style="margin-top:10px;">
-        نسخ اليوزر
-    </button>
+  <button class="contact-btn" onclick="openTelegram()">
+    فتح التليجرام
+  </button>
 
-    <div class="note">
-        اضغط على فتح التليجرام للتواصل مباشرة مع الدعم
-    </div>
+  <button class="contact-btn" onclick="copyUser()" style="margin-top:10px;">
+    نسخ اليوزر
+  </button>
 
-</div>
+  <div class="note">
+    اضغط على زر فتح التليجرام للتواصل مباشرة مع فريق الدعم
+  </div>
 
 </div>
 
 <script>
-
-/* فتح تليجرام */
 function openTelegram(){
-    window.open("https://t.me/PharacoinSupport", "_blank");
+  window.open("https://t.me/PharacoinSupport", "_blank");
 }
 
-/* نسخ اليوزر */
 function copyUser(){
-    navigator.clipboard.writeText("@PharacoinSupport");
-    alert("تم نسخ اليوزر ✔");
+  navigator.clipboard.writeText("@PharacoinSupport");
+  alert("تم نسخ اليوزر ✔");
 }
-
-/* حركة الخلفية */
-window.addEventListener("scroll",()=>{
-    document.querySelector(".bg").style.transform=
-    `translateY(${window.scrollY*0.25}px) scale(1.1)`;
-});
-
 </script>
-
+<!-- روابط إضافية أسفل الصفحة -->
+<div class="footer-links">
+  <a href="convert.html">💱 تحويل العملات</a> |
+  <a href="contact.html">📞 تواصل معنا</a> |
+  <a href="about.html">ℹ️ من نحن</a> |
+  <a href="faq.html">❓ الأسئلة الشائعة</a> |
+  <a href="terms.html">📜 الشروط</a> |
+  <a href="privacy.html">🔒 الخصوصية</a>
+</div>
 </body>
 </html>
